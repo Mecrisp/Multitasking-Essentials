@@ -1,0 +1,299 @@
+
+multitask-cooperative.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00000000 <init_leds-0x2>:
+   0:	aab5                	j	17c <Reset>
+
+00000002 <init_leds>:
+   2:	40021737          	lui	x14,0x40021
+   6:	0761                	add	x14,x14,24 # 40021018 <RCU_APB2EN>
+   8:	57fd                	li	x15,-1
+   a:	c31c                	sw	x15,0(x14)
+   c:	40011737          	lui	x14,0x40011
+  10:	80c70713          	add	x14,x14,-2036 # 4001080c <GPIOA_ODR>
+  14:	4799                	li	x15,6
+  16:	c31c                	sw	x15,0(x14)
+  18:	40011737          	lui	x14,0x40011
+  1c:	0731                	add	x14,x14,12 # 4001100c <GPIOC_ODR>
+  1e:	6789                	lui	x15,0x2
+  20:	c31c                	sw	x15,0(x14)
+  22:	40011737          	lui	x14,0x40011
+  26:	80070713          	add	x14,x14,-2048 # 40010800 <GPIOA_BASE>
+  2a:	444447b7          	lui	x15,0x44444
+  2e:	22478793          	add	x15,x15,548 # 44444224 <RCU_APB1EN+0x4423208>
+  32:	c31c                	sw	x15,0(x14)
+  34:	40011737          	lui	x14,0x40011
+  38:	0711                	add	x14,x14,4 # 40011004 <GPIOC_CRH>
+  3a:	442447b7          	lui	x15,0x44244
+  3e:	44478793          	add	x15,x15,1092 # 44244444 <RCU_APB1EN+0x4223428>
+  42:	c31c                	sw	x15,0(x14)
+  44:	8082                	ret
+
+00000046 <red_on>:
+  46:	40011737          	lui	x14,0x40011
+  4a:	0741                	add	x14,x14,16 # 40011010 <GPIOC_BSRR>
+  4c:	200007b7          	lui	x15,0x20000
+  50:	c31c                	sw	x15,0(x14)
+  52:	8082                	ret
+
+00000054 <red_off>:
+  54:	40011737          	lui	x14,0x40011
+  58:	0741                	add	x14,x14,16 # 40011010 <GPIOC_BSRR>
+  5a:	6789                	lui	x15,0x2
+  5c:	c31c                	sw	x15,0(x14)
+  5e:	8082                	ret
+
+00000060 <green_on>:
+  60:	40011737          	lui	x14,0x40011
+  64:	81070713          	add	x14,x14,-2032 # 40010810 <GPIOA_BSRR>
+  68:	000207b7          	lui	x15,0x20
+  6c:	c31c                	sw	x15,0(x14)
+  6e:	8082                	ret
+
+00000070 <green_off>:
+  70:	40011737          	lui	x14,0x40011
+  74:	81070713          	add	x14,x14,-2032 # 40010810 <GPIOA_BSRR>
+  78:	4789                	li	x15,2
+  7a:	c31c                	sw	x15,0(x14)
+  7c:	8082                	ret
+
+0000007e <blue_on>:
+  7e:	40011737          	lui	x14,0x40011
+  82:	81070713          	add	x14,x14,-2032 # 40010810 <GPIOA_BSRR>
+  86:	000407b7          	lui	x15,0x40
+  8a:	c31c                	sw	x15,0(x14)
+  8c:	8082                	ret
+
+0000008e <blue_off>:
+  8e:	40011737          	lui	x14,0x40011
+  92:	81070713          	add	x14,x14,-2032 # 40010810 <GPIOA_BSRR>
+  96:	4791                	li	x15,4
+  98:	c31c                	sw	x15,0(x14)
+  9a:	8082                	ret
+
+0000009c <delay_cycles>:
+  9c:	1171                	add	x2,x2,-4
+  9e:	c006                	sw	x1,0(x2)
+  a0:	c00027f3          	rdcycle	x15
+  a4:	2809                	jal	b6 <pause>
+  a6:	c0002773          	rdcycle	x14
+  aa:	8f1d                	sub	x14,x14,x15
+  ac:	fea76ce3          	bltu	x14,x10,a4 <delay_cycles+0x8>
+  b0:	4082                	lw	x1,0(x2)
+  b2:	0111                	add	x2,x2,4
+  b4:	8082                	ret
+
+000000b6 <pause>:
+  b6:	f8810113          	add	x2,x2,-120
+  ba:	da86                	sw	x1,116(x2)
+  bc:	d88e                	sw	x3,112(x2)
+  be:	d692                	sw	x4,108(x2)
+  c0:	d496                	sw	x5,104(x2)
+  c2:	d29a                	sw	x6,100(x2)
+  c4:	d09e                	sw	x7,96(x2)
+  c6:	cea2                	sw	x8,92(x2)
+  c8:	cca6                	sw	x9,88(x2)
+  ca:	caaa                	sw	x10,84(x2)
+  cc:	c8ae                	sw	x11,80(x2)
+  ce:	c6b2                	sw	x12,76(x2)
+  d0:	c4b6                	sw	x13,72(x2)
+  d2:	c2ba                	sw	x14,68(x2)
+  d4:	c0be                	sw	x15,64(x2)
+  d6:	de42                	sw	x16,60(x2)
+  d8:	dc46                	sw	x17,56(x2)
+  da:	da4a                	sw	x18,52(x2)
+  dc:	d84e                	sw	x19,48(x2)
+  de:	d652                	sw	x20,44(x2)
+  e0:	d456                	sw	x21,40(x2)
+  e2:	d25a                	sw	x22,36(x2)
+  e4:	d05e                	sw	x23,32(x2)
+  e6:	ce62                	sw	x24,28(x2)
+  e8:	cc66                	sw	x25,24(x2)
+  ea:	ca6a                	sw	x26,20(x2)
+  ec:	c86e                	sw	x27,16(x2)
+  ee:	c672                	sw	x28,12(x2)
+  f0:	c476                	sw	x29,8(x2)
+  f2:	c27a                	sw	x30,4(x2)
+  f4:	c07e                	sw	x31,0(x2)
+  f6:	20000697          	auipc	x13,0x20000
+  fa:	70a68693          	add	x13,x13,1802 # 20000800 <current_task>
+  fe:	4298                	lw	x14,0(x13)
+ 100:	00272423          	sw	x2,8(x14)
+
+00000104 <next_task>:
+ 104:	4318                	lw	x14,0(x14)
+ 106:	435c                	lw	x15,4(x14)
+ 108:	dff5                	beqz	x15,104 <next_task>
+ 10a:	c298                	sw	x14,0(x13)
+ 10c:	00872103          	lw	x2,8(x14)
+ 110:	4f82                	lw	x31,0(x2)
+ 112:	4f12                	lw	x30,4(x2)
+ 114:	4ea2                	lw	x29,8(x2)
+ 116:	4e32                	lw	x28,12(x2)
+ 118:	4dc2                	lw	x27,16(x2)
+ 11a:	4d52                	lw	x26,20(x2)
+ 11c:	4ce2                	lw	x25,24(x2)
+ 11e:	4c72                	lw	x24,28(x2)
+ 120:	5b82                	lw	x23,32(x2)
+ 122:	5b12                	lw	x22,36(x2)
+ 124:	5aa2                	lw	x21,40(x2)
+ 126:	5a32                	lw	x20,44(x2)
+ 128:	59c2                	lw	x19,48(x2)
+ 12a:	5952                	lw	x18,52(x2)
+ 12c:	58e2                	lw	x17,56(x2)
+ 12e:	5872                	lw	x16,60(x2)
+ 130:	4786                	lw	x15,64(x2)
+ 132:	4716                	lw	x14,68(x2)
+ 134:	46a6                	lw	x13,72(x2)
+ 136:	4636                	lw	x12,76(x2)
+ 138:	45c6                	lw	x11,80(x2)
+ 13a:	4556                	lw	x10,84(x2)
+ 13c:	44e6                	lw	x9,88(x2)
+ 13e:	4476                	lw	x8,92(x2)
+ 140:	5386                	lw	x7,96(x2)
+ 142:	5316                	lw	x6,100(x2)
+ 144:	52a6                	lw	x5,104(x2)
+ 146:	5236                	lw	x4,108(x2)
+ 148:	51c6                	lw	x3,112(x2)
+ 14a:	50d6                	lw	x1,116(x2)
+ 14c:	07810113          	add	x2,x2,120
+ 150:	8082                	ret
+
+00000152 <preparetask>:
+ 152:	18850713          	add	x14,x10,392
+ 156:	c518                	sw	x14,8(x10)
+ 158:	1eb52e23          	sw	x11,508(x10)
+ 15c:	c150                	sw	x12,4(x10)
+ 15e:	20000717          	auipc	x14,0x20000
+ 162:	6a270713          	add	x14,x14,1698 # 20000800 <current_task>
+ 166:	4318                	lw	x14,0(x14)
+ 168:	431c                	lw	x15,0(x14)
+ 16a:	c11c                	sw	x15,0(x10)
+ 16c:	c308                	sw	x10,0(x14)
+ 16e:	8082                	ret
+
+00000170 <wake>:
+ 170:	57fd                	li	x15,-1
+ 172:	c15c                	sw	x15,4(x10)
+ 174:	8082                	ret
+
+00000176 <idle>:
+ 176:	00052223          	sw	x0,4(x10)
+ 17a:	8082                	ret
+
+0000017c <Reset>:
+ 17c:	20000117          	auipc	x2,0x20000
+ 180:	08410113          	add	x2,x2,132 # 20000200 <blink_red_taskarea>
+ 184:	20000717          	auipc	x14,0x20000
+ 188:	e7c70713          	add	x14,x14,-388 # 20000000 <boot_taskarea>
+ 18c:	c318                	sw	x14,0(x14)
+ 18e:	20000797          	auipc	x15,0x20000
+ 192:	67278793          	add	x15,x15,1650 # 20000800 <current_task>
+ 196:	c398                	sw	x14,0(x15)
+ 198:	3f39                	jal	b6 <pause>
+ 19a:	35a5                	jal	2 <init_leds>
+ 19c:	20000517          	auipc	x10,0x20000
+ 1a0:	06450513          	add	x10,x10,100 # 20000200 <blink_red_taskarea>
+ 1a4:	00000597          	auipc	x11,0x0
+ 1a8:	04c58593          	add	x11,x11,76 # 1f0 <blink_red>
+ 1ac:	567d                	li	x12,-1
+ 1ae:	3755                	jal	152 <preparetask>
+ 1b0:	20000517          	auipc	x10,0x20000
+ 1b4:	25050513          	add	x10,x10,592 # 20000400 <blink_green_taskarea>
+ 1b8:	00000597          	auipc	x11,0x0
+ 1bc:	05258593          	add	x11,x11,82 # 20a <blink_green>
+ 1c0:	567d                	li	x12,-1
+ 1c2:	3f41                	jal	152 <preparetask>
+ 1c4:	20000517          	auipc	x10,0x20000
+ 1c8:	43c50513          	add	x10,x10,1084 # 20000600 <blink_blue_taskarea>
+ 1cc:	00000597          	auipc	x11,0x0
+ 1d0:	05458593          	add	x11,x11,84 # 220 <blink_blue>
+ 1d4:	4601                	li	x12,0
+ 1d6:	3fb5                	jal	152 <preparetask>
+ 1d8:	04c4b537          	lui	x10,0x4c4b
+ 1dc:	40050513          	add	x10,x10,1024 # 4c4b400 <CYCLES_MS+0x4c494c0>
+ 1e0:	3d75                	jal	9c <delay_cycles>
+ 1e2:	20000517          	auipc	x10,0x20000
+ 1e6:	41e50513          	add	x10,x10,1054 # 20000600 <blink_blue_taskarea>
+ 1ea:	3759                	jal	170 <wake>
+
+000001ec <mainloop>:
+ 1ec:	35e9                	jal	b6 <pause>
+ 1ee:	bffd                	j	1ec <mainloop>
+
+000001f0 <blink_red>:
+ 1f0:	000c3537          	lui	x10,0xc3
+ 1f4:	50050513          	add	x10,x10,1280 # c3500 <CYCLES_MS+0xc15c0>
+ 1f8:	3555                	jal	9c <delay_cycles>
+ 1fa:	35b1                	jal	46 <red_on>
+ 1fc:	001ae537          	lui	x10,0x1ae
+ 200:	b0050513          	add	x10,x10,-1280 # 1adb00 <CYCLES_MS+0x1abbc0>
+ 204:	3d61                	jal	9c <delay_cycles>
+ 206:	35b9                	jal	54 <red_off>
+ 208:	b7e5                	j	1f0 <blink_red>
+
+0000020a <blink_green>:
+ 20a:	00187537          	lui	x10,0x187
+ 20e:	a0050513          	add	x10,x10,-1536 # 186a00 <CYCLES_MS+0x184ac0>
+ 212:	3569                	jal	9c <delay_cycles>
+ 214:	35b1                	jal	60 <green_on>
+ 216:	00271537          	lui	x10,0x271
+ 21a:	3549                	jal	9c <delay_cycles>
+ 21c:	3d91                	jal	70 <green_off>
+ 21e:	b7f5                	j	20a <blink_green>
+
+00000220 <blink_blue>:
+ 220:	0024a537          	lui	x10,0x24a
+ 224:	f0050513          	add	x10,x10,-256 # 249f00 <CYCLES_MS+0x247fc0>
+ 228:	3d95                	jal	9c <delay_cycles>
+ 22a:	3d91                	jal	7e <blue_on>
+ 22c:	0041f537          	lui	x10,0x41f
+ 230:	b0050513          	add	x10,x10,-1280 # 41eb00 <CYCLES_MS+0x41cbc0>
+ 234:	35a5                	jal	9c <delay_cycles>
+ 236:	3da1                	jal	8e <blue_off>
+ 238:	b7e5                	j	220 <blink_blue>
+
+Disassembly of section .bss:
+
+20000000 <boot_taskarea>:
+	...
+
+20000200 <blink_red_taskarea>:
+	...
+
+20000400 <blink_green_taskarea>:
+	...
+
+20000600 <blink_blue_taskarea>:
+	...
+
+20000800 <current_task>:
+20000800:	0000                	unimp
+	...
+
+Disassembly of section .riscv.attributes:
+
+00000000 <.riscv.attributes>:
+   0:	2c41                	jal	290 <blink_blue+0x70>
+   2:	0000                	unimp
+   4:	7200                	.2byte	0x7200
+   6:	7369                	lui	x6,0xffffa
+   8:	01007663          	bgeu	x0,x16,14 <offset_savedstack+0xc>
+   c:	0022                	c.slli	x0,0x8
+   e:	0000                	unimp
+  10:	7205                	lui	x4,0xfffe1
+  12:	3376                	.2byte	0x3376
+  14:	6932                	.2byte	0x6932
+  16:	7032                	.2byte	0x7032
+  18:	5f30                	lw	x12,120(x14)
+  1a:	326d                	jal	fffff9c4 <RCU_APB1EN+0xbffde9a8>
+  1c:	3070                	.2byte	0x3070
+  1e:	635f 7032 5f30      	.byte	0x5f, 0x63, 0x32, 0x70, 0x30, 0x5f
+  24:	6d7a                	.2byte	0x6d7a
+  26:	756d                	lui	x10,0xffffb
+  28:	316c                	.2byte	0x316c
+  2a:	3070                	.2byte	0x3070
+	...

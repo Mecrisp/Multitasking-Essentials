@@ -1,0 +1,146 @@
+
+--------------------------------------------------------------------------------
+  Multitasking essentials
+--------------------------------------------------------------------------------
+
+A small introduction into how to implement both cooperative and preemptive
+multitasking in RISC-V assembly.
+
+The examples are intended for a GD32VF103 microcontroller on a Longan Nano
+board which includes an active-low RGB LED on PC13, PA1, and PA2.
+
+--------------------------------------------------------------------------------
+
+Multitasking is the idea to run multiple routines virtually "in parallel"
+by quickly executing these in turn on a single processor, sharing the
+processing time between individual tasks.
+
+For the tasks to run "as if they were on their own", one needs a routine
+for the context switch that saves and subsequently restores all required state
+necessary for running a task.
+
+There are two fundamental concepts to build multitasking on:
+
+* In cooperative multitasking, each task releases the processor voluntarily
+  by calling the context switch directly at suitable places.
+
+* In preemptive multitasking, the context switch is triggered periodically
+  by a timer interrupt.
+
+The code required for these is very similar, and both are presented here,
+but they have different strengths and weaknesses.
+
+--------------------------------------------------------------------------------
+
+Cooperative multitasking allows very efficient usage of processing resources,
+as each task can release execution whenever it needs to wait for something,
+and atomicity of read-modify-write operations to peripheral registers and
+global data structures is guranteed, as context switches only happen at
+defined places in the code, mostly in delays, loops that wait for something
+like slow IO, or in breaks of very long calculations like when one calculates
+multiple fast fourier transforms in a row. Usually, all what is necessary is
+embedding a call to the context switch in strategically choosen low-level
+routines.
+
+One can check the performance by adding a task that just pulses an output
+pin which can be observed by an oscilloscope or with a slow moving-coil
+type current meter that is set to full scale by a variable resistor when no
+other tasks are running.
+
+The interrupt layer keeps clear, so one can non-critical functions like
+user interface and logging in tasks, and handle the cricital hard realtime
+parts in interrupts. As no hardware support is necessary beyond enough RAM to
+run cooperative multitasking, it can be used under almost all circumstances
+in embedded targets.
+
+On the other hand, cooperative multitasking requires all tasks to behave well,
+one task that clogs the CPU will crash the whole system, and the time of
+the next context switch depends on the individual tasks.
+
+--------------------------------------------------------------------------------
+
+Preemptive multitasking assigns each task a fixed time slot for execution,
+and transfers control to the next task automatically. A task that clogs the
+processor will not halt the whole system, and each task will get a fixed share
+of the available execution time in a deterministic way. Within a task, the code
+does not need to know about the existence of the multitasker, as execution is
+passed in and out of the task without further assistance. This can be further
+combined with memory protection to isolate tasks from each other.
+
+On the other hand, preemptive multitasking requires hardware support from the
+interrupt layer, which is therefore not available solely for critical hard
+realtime handlers anymore.
+
+More advanced implementations may offer a way for a task to releasing execution
+voluntarily if there is no work to be done in the current time slot, but in
+simple implementations, the processing time allocated for a task is wasted if
+it has to wait for something.
+
+The biggest problem, however, is the complete loss of atomicity for access to
+common periherals or data structures, as the execution of everything else
+- from the viewpoint of one task - happens like "within" an interrupt handler
+that can occour at any point in time. This requires very careful design to
+share common resources without nasty side effects.
+
+--------------------------------------------------------------------------------
+
+For short, cooperative multitasking is effective in small embedded setups
+in which one has complete control over all tasks that are guranteed to
+behave nicely, and where performance is the most appreciated goal.
+
+Preemptive multitasking is used in almost all widely known (desktop) operating
+systems that need to handle a variety of tasks, of which some could be rogue
+or faulty. The problem with loss of atomicity is usually solved by carefully
+designed interfaces or hardware abstraction layers / device drivers.
+
+--------------------------------------------------------------------------------
+
+Despite these important differences, the actual implementation of both
+ways is very similar. Compare the assembler source files yourself!
+
+For every task, there is a memory area large enough to contain the saved
+state of the registers, the stack, and a bit of task housekeeping information.
+
+The task areas are arranged in a ring, with a pointer from each task structure
+to the next one, with the last one in the ring pointing back to the first one.
+
+Each task also has a flag whether it is active or not, as ring insertion or
+deletion is not atomic under all circumstances, so if one wants to activate
+or deactivate a task by a hardware event, a flag is provided.
+
+For brevity of the examples, tasks must not return, but in a more enhanced
+implementation, the return of a task might result in an error message or
+simply in the removal of that particular task from the ring.
+
+Questions are welcome!
+
+--------------------------------------------------------------------------------
+  How to run:
+--------------------------------------------------------------------------------
+
+If you have connected your
+
+Longan Nano board to
+             a USB-serial cable with 3.3V logic levels
+
+3V3 or 5V -- VCC (measure the voltage present here)
+R0        -- TXD
+T0        -- RXD
+GND       -- GND
+
+you can flash it if you first
+
+* Press and hold BOOT0 button
+* Press and release Reset button
+* Release BOOT0 button
+
+and then execute one of
+
+stm32loader -e -w -v -p /dev/ttyUSB0 multitask-cooperative.bin
+stm32loader -e -w -v -p /dev/ttyUSB0 multitask-preemptive.bin
+
+on your host machine.
+
+Press and release Reset button to start blinking.
+
+--------------------------------------------------------------------------------

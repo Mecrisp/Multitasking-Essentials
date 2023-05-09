@@ -1,0 +1,17 @@
+#!/bin/sh
+
+riscv64-linux-gnu-as multitask-cooperative.s -o multitask-cooperative.o -march=rv32im
+riscv64-linux-gnu-ld -o multitask-cooperative.elf -T memmap multitask-cooperative.o -m elf32lriscv
+riscv64-linux-gnu-objdump -Mnumeric -D multitask-cooperative.elf > multitask-cooperative.list
+riscv64-linux-gnu-objcopy multitask-cooperative.elf multitask-cooperative.bin -O binary
+
+riscv64-linux-gnu-as multitask-preemptive.s -o multitask-preemptive.o -march=rv32im
+riscv64-linux-gnu-ld -o multitask-preemptive.elf -T memmap multitask-preemptive.o -m elf32lriscv
+riscv64-linux-gnu-objdump -Mnumeric -D multitask-preemptive.elf > multitask-preemptive.list
+riscv64-linux-gnu-objcopy multitask-preemptive.elf multitask-preemptive.bin -O binary
+
+rm -f *.o
+rm -f *.elf
+
+md5sum *.bin
+ls -l *.bin

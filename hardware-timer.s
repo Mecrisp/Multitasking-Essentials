@@ -5,36 +5,6 @@
 # not required to understand the essentials of multitasking.
 
 # -----------------------------------------------------------------------------
-#   Labels for a few hardware ports
-# -----------------------------------------------------------------------------
-
-  .equ GPIOA_BASE, 0x40010800
-  .equ GPIOB_BASE, 0x40010C00
-  .equ GPIOC_BASE, 0x40011000
-  .equ GPIOD_BASE, 0x40011400
-  .equ GPIOE_BASE, 0x40011800
-
-  .equ GPIOA_CRL,  GPIOA_BASE + 0x00
-  .equ GPIOA_CRH,  GPIOA_BASE + 0x04
-  .equ GPIOA_IDR,  GPIOA_BASE + 0x08
-  .equ GPIOA_ODR,  GPIOA_BASE + 0x0C
-  .equ GPIOA_BSRR, GPIOA_BASE + 0x10
-  .equ GPIOA_BRR,  GPIOA_BASE + 0x14
-  .equ GPIOA_LCKR, GPIOA_BASE + 0x18
-
-  .equ GPIOC_CRL,  GPIOC_BASE + 0x00
-  .equ GPIOC_CRH,  GPIOC_BASE + 0x04
-  .equ GPIOC_IDR,  GPIOC_BASE + 0x08
-  .equ GPIOC_ODR,  GPIOC_BASE + 0x0C
-  .equ GPIOC_BSRR, GPIOC_BASE + 0x10
-  .equ GPIOC_BRR,  GPIOC_BASE + 0x14
-  .equ GPIOC_LCKR, GPIOC_BASE + 0x18
-
-  .equ RCU_BASE, 0x40021000
-  .equ RCU_APB2EN, RCU_BASE + 0x18
-  .equ RCU_APB1EN, RCU_BASE + 0x1C
-
-# -----------------------------------------------------------------------------
 init_timer_1khz:
 # -----------------------------------------------------------------------------
 
